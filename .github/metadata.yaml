@@ -1,0 +1,9 @@
+# .github/metadata.yaml
+description: "Memory-contiguous-borrow operations for Cursor — peek/advance/consume/seek/count over Cursor<DomainTag> where DomainTag.Borrowed: Memory.Contiguous<Byte>.Borrowed.Protocol."
+topics:
+  - primitives
+  - cursor
+  - memory
+homepage: "https://swift-institute.org"
+readme:
+  family: E
