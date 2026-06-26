@@ -1,5 +1,5 @@
 # .github/metadata.yaml
-description: "Memory-contiguous-borrow operations for Cursor — peek/advance/consume/seek/count over Cursor<DomainTag> where DomainTag.Borrowed: Memory.Contiguous<Byte>.Borrowed.Protocol."
+description: "Cursor operations over contiguous memory — peek/advance/consume/seek on a borrowed byte region, plus the owned Memory.Cursor and Memory.Snapshot.Cursor single-pass iterators."
 topics:
   - primitives
   - cursor

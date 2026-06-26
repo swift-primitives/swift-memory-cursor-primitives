@@ -9,14 +9,16 @@
 //
 // ===----------------------------------------------------------------------===//
 
-import Testing
+import Cursor_Primitive
 import Memory_Cursor_Primitives_Test_Support
-import Byte_Cursor_Primitives
+import Testing
 
 private enum TestDomain {}
 
 extension TestDomain: Ownership.Borrow.`Protocol` {
-    typealias Borrowed = Byte.Borrowed
+    // W3 PRUNE: Byte.Borrowed nominal deleted; the borrowed projection is
+    // bare Swift.Span<Byte>.
+    typealias Borrowed = Swift.Span<Byte>
 }
 
 // MARK: - Test Suite Structure

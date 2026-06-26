@@ -9,15 +9,15 @@
 //
 // ===----------------------------------------------------------------------===//
 
-public import Cursor_Primitive
 public import Byte_Primitives
-public import Memory_Contiguous_Primitives
-public import Cardinal_Primitives
-public import Ordinal_Primitives
+import Cardinal_Primitives
+public import Cursor_Primitive
+import Ordinal_Primitives
+public import Span_Protocol_Primitives
 public import Tagged_Primitives
 
 // Cursor operations — applicable to every `Cursor<DomainTag>` whose
-// `DomainTag.Borrowed` conforms to `Memory.Contiguous<Byte>.Borrowed.\`Protocol\``.
+// `DomainTag.Borrowed` conforms to `Span.\`Protocol\`` with `Element == Byte`.
 // peek / peek(at:) / advance / advance(by:) / consume / position / count /
 // isAtEnd / seek(to:). Generalized over a single protocol constraint so the
 // same surface fires for Cursor<Byte>, Cursor<Text>, Cursor<Binary>, and any
@@ -27,17 +27,29 @@ public import Tagged_Primitives
 // `cursor-shape-a-vs-three-worlds.md` v1.5.0 — Binary as third Case-B
 // conformer.
 //
-// ## Byte Substrate (W2 cascade landed)
+// ## Byte Substrate (W3 `.Borrowed` prune landed)
 //
-// The constraint is `Element == Byte` per the W2 byte-domain typing
-// discipline — `Byte.Borrowed` and `Binary.Borrowed` both expose
-// `Swift.Span<Byte>`. peek/consume return `Byte` directly without
-// per-element wrapping.
+// The constraint is `Element == Byte` per the byte-domain typing discipline.
+// After the W3 prune, `Byte`/`Text`/`Binary` all resolve `Borrowed` to bare
+// `Swift.Span<Byte>` (the `Byte.Borrowed`/`Binary.Borrowed` nominals are
+// deleted), which conforms to the unified `Span.`Protocol`` by identity.
+// These operations read only `storage.span`, so they fire unchanged for
+// every such cursor. peek/consume return `Byte` directly without per-element
+// wrapping.
 
 extension Cursor
-where DomainTag.Borrowed: Memory.Contiguous<Byte>.Borrowed.`Protocol`,
-      DomainTag.Borrowed.Element == Byte,
-      DomainTag: ~Copyable {
+where
+    DomainTag.Borrowed: Span.`Protocol`,
+    DomainTag.Borrowed.Element == Byte,
+    DomainTag: ~Copyable
+{
+    // swiftlint:disable no_tag_suffix_phantom
+    // reason: `DomainTag` is the public generic-parameter name of `Cursor`
+    // (`swift-cursor-primitives`), referenced here in the typed position and
+    // count signatures. Renaming it to the bare-concept form is a cross-package
+    // breaking change, out of scope for mechanical release-prep; deferred to a
+    // coordinated rename.
+
     /// The cursor's current position within the borrowed source.
     @inlinable
     public var position: Tagged<DomainTag, Ordinal> { _position }
@@ -124,4 +136,5 @@ where DomainTag.Borrowed: Memory.Contiguous<Byte>.Borrowed.`Protocol`,
         precondition(p >= 0 && p <= storage.span.count, "seek to position out of bounds")
         _position = position
     }
+    // swiftlint:enable no_tag_suffix_phantom
 }

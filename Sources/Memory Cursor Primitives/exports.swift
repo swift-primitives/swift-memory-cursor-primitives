@@ -10,3 +10,4 @@
 // ===----------------------------------------------------------------------===//
 
 @_exported public import Cursor_Primitive
+@_exported public import Iterator_Protocol

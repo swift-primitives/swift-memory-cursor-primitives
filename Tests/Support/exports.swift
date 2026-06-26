@@ -13,4 +13,3 @@
 @_exported public import Memory_Cursor_Primitives
 @_exported public import Cursor_Primitives_Test_Support
 @_exported public import Byte_Primitives_Test_Support
-@_exported public import Byte_Cursor_Primitives_Test_Support
